@@ -3,6 +3,7 @@ name: Check All Workflows Status
 on:
   schedule:
     - cron: '0 23 * * *' # Runs at 23:00 UTC every day
+  workflow_dispatch:
 
 jobs:
   check-status:
