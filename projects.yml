@@ -5,7 +5,7 @@ projects:
         repos:
           - Email_and_Repo_Number: "krishnakumar@outlook.com - Repo 1"
             custom_project_name: "001 Accounts"
-            repo_owner: "kishna3214"
+            repo_owner: "hwu282h7dy2h28wh1usyb"
             repo_name: "idemdownload"
             workflow_file: "downloader.yml"
           - Email_and_Repo_Number: "krishnakumar@outlook.com - Repo 2"
