@@ -39,6 +39,12 @@ def send_discord_message(Account_Number_and_ID, custom_name, repo_name, repo_own
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(2), retry=retry_if_exception_type(requests.exceptions.RequestException))
 def make_github_request(url):
     response = requests.get(url)
+    if response.status_code == 403 and 'X-RateLimit-Remaining' in response.headers and response.headers['X-RateLimit-Remaining'] == '0':
+        reset_time = int(response.headers['X-RateLimit-Reset'])
+        sleep_time = max(0, reset_time - time.time())
+        logging.error(f"Rate limit exceeded. Sleeping for {sleep_time} seconds.")
+        time.sleep(sleep_time)
+        response = requests.get(url)
     response.raise_for_status()
     return response
 
@@ -86,7 +92,7 @@ def check_repo(repo):
             return
 
     except requests.exceptions.RequestException as e:
-        logging.error(f"Error checking project {custom_name} - {repo_name}: {e}")
+        logging.error(f"Error checking project {custom_name} - {repo_name}: {e.response.text if e.response else str(e)}")
 
 def check_account(account):
     with ThreadPoolExecutor(max_workers=5) as executor:
